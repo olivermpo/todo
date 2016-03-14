@@ -4,20 +4,20 @@ var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgres://postgres:Pqb$nw5K&R@40.114.198.154:1999/todo';
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', function(request, response, next) {
+  response.send('respond with a resource');
 });
 
 
-router.get('/api/todoitems', function(req, res) {
+router.get('/api/todoitems', function(request, response) {
 
     var results = [];
 
-    pg.connect(connectionString, function(err, pgClient, done) {
-        if(err) {
+    pg.connect(connectionString, function(error, pgClient, done) {
+        if(error) {
           done();
-          console.log(err);
-          return res.status(500).json({ success: false, data: err});
+          console.log(error);
+          return response.status(500).json({ success: false, data: error});
         }
 
         var query = pgClient.query("SELECT * FROM todoItems ORDER BY id ASC;");
@@ -28,7 +28,7 @@ router.get('/api/todoitems', function(req, res) {
 
         query.on('end', function() {
             done();
-            return res.json(results);
+            return response.json(results);
         });
 
     });
@@ -36,17 +36,17 @@ router.get('/api/todoitems', function(req, res) {
 });
 
 
-router.post('/api/todoitems', function(req, res) {
+router.post('/api/todoitems', function(request, response) {
 
     var results = [];
 
-    var httpData = {text: req.body.text, complete: false};
+    var httpData = {text: request.body.text, complete: false};
 
-    pg.connect(connectionString, function(err, pgClient, done) {
-        if(err) {
+    pg.connect(connectionString, function(error, pgClient, done) {
+        if(error) {
           done();
-          console.log(err);
-          return res.status(500).json({ success: false, httpData: err});
+          console.log(error);
+          return response.status(500).json({ success: false, httpData: error});
         }
 
         pgClient.query("INSERT INTO todoItems(itemData, complete) values($1, $2)", [httpData.text, httpData.complete]);
@@ -59,30 +59,30 @@ router.post('/api/todoitems', function(req, res) {
 
         query.on('end', function() {
             done();
-            return res.json(results);
+            return response.json(results);
         });
 
 
     });
 });
 
-router.put('/api/todoitems/:itemId', function(req, res) {
+router.put('/api/todoitems/:itemId', function(request, response) {
 
     var results = [];
 
     // Grab data from the URL parameters
-    var id = req.params.itemId;
+    var id = request.params.itemId;
 
     // Grab data from http request
-    var data = {text: req.body.text, complete: req.body.complete};
+    var data = {text: request.body.text, complete: request.body.complete};
 
     // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, pgClient, done) {
+    pg.connect(connectionString, function(error, pgClient, done) {
         // Handle connection errors
-        if(err) {
+        if(error) {
           done();
-          console.log(err);
-          return res.status(500).send(json({ success: false, data: err}));
+          console.log(error);
+          return response.status(500).send(json({ success: false, data: error}));
         }
 
         // SQL Query > Update Data
@@ -99,28 +99,28 @@ router.put('/api/todoitems/:itemId', function(req, res) {
         // After all data is returned, close connection and return results
         query.on('end', function() {
             done();
-            return res.json(results);
+            return response.json(results);
         });
     });
 
 });
 
 
-router.delete('/api/todoitems/:itemId', function(req, res) {
+router.delete('/api/todoitems/:itemId', function(request, response) {
 
     var results = [];
 
     // Grab data from the URL parameters
-    var id = req.params.itemId;
+    var id = request.params.itemId;
 
 
     // Get a Postgres pgClient from the connection pool
-    pg.connect(connectionString, function(err, pgClient, done) {
+    pg.connect(connectionString, function(error, pgClient, done) {
         // Handle connection errors
-        if(err) {
+        if(error) {
           done();
-          console.log(err);
-          return res.status(500).json({ success: false, data: err});
+          console.log(error);
+          return response.status(500).json({ success: false, data: error});
         }
 
         // SQL Query > Delete Data
@@ -137,7 +137,7 @@ router.delete('/api/todoitems/:itemId', function(req, res) {
         // After all data is returned, close connection and return results
         query.on('end', function() {
             done();
-            return res.json(results);
+            return response.json(results);
         });
     });
 
