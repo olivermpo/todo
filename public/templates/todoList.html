@@ -1,0 +1,27 @@
+<div class="container">
+  <form class="form-horizontal" _lpchecked="1">
+    <fieldset>
+      <legend>Todo</legend>
+      <div class="form-group">
+        <label for="item" class="col-lg-2 control-label">Add a new one</label>
+        <div class="col-lg-10">
+          <input type="text" class="form-control" ng-model="vm.itemData" id="inputTodo" placeholder="Todo" style="cursor: auto; background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAkCAYAAADo6zjiAAAAAXNSR0IArs4c6QAAAeJJREFUWAntk88rRFEUx71nSlnMkpK/YMTCBmVBibKQpWRhoShspgw1Y2aahQUlFn5sLEwpTUoRUmInURZkZmsjFtYSmudz5OgaZmHjKffV6Xu+53zPPeed+55T4tOTTCYHaD3o+tRf2oawOj8HeHt33wcIyBjcRwUwjtVj167rLsbj8TP8Tw+6csdxxjzPayZxj59OJBJ7n0SQTCZTmsvlRtC1Q5+wTWrThTrhLolq8AJxGGvB+vP5/DHxbrNAmsNPySXRtGE9+LvEw6aOuJPNZnfIzeF3Yt3YKrolU6e+XME0gkoNCMJlM8sUvW3oPRchXvPumzCFrkoDqVSqF12HckViQ+SalCvKAK1KTKRAhpIvVZ9iujKu4uNg6r7VySHkWvQwRRnAU1KIfAtFc4Vag/+oRgY4Moo/XN7qjnvMaQB+qL6JxB8DgcCxxorpJM8GvvRyKY5IMz1AEP4MDHK3LxqneIb4pXJFYhPRaPRWOX/POrFd5YrEFjjvRLmiG4vFbiC1CKTBAbYCb0S8pSJB+EMwGGwgP4ntY2tYB7/hvKkj5oVCoS5wFNvGNrjKPupHTJ36jjq/jQw0S89h+QZ8ff7vAHwbV6z+3Nf12+Z2A3YDdgN2A3YDdgN2A3YDf2IDrwcSt9jHU+IqAAAAAElFTkSuQmCC&quot;); background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; background-repeat: no-repeat;"
+            autocomplete="off">
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  <button class="btn btn-success" ng-click="vm.addTodoItem()">Add</button>
+
+  <ul ng-repeat="todo in vm.todoData">
+    <li>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="todo.itemdata.complete" ng-click="vm.markAsComplete(todo)"/>{{todo.itemdata.text}}</label>
+
+      </div>
+      <small>Added On: {{todo.itemdata.createdOn}}</small>
+    </li>
+  </ul>
+</div>

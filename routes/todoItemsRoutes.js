@@ -2,6 +2,25 @@ var express = require('express');
 var router = express.Router();
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'postgres://postgres:Pqb$nw5K&R@40.114.198.154:1999/todo';
+var winston = require('winston');
+//var logger = new winston.Logger();
+
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      name: 'info-file',
+      filename: 'filelog-info.log',
+      level: 'info'
+    }),
+    new (winston.transports.File)({
+      name: 'error-file',
+      filename: 'filelog-error.log',
+      level: 'error'
+    })
+  ]
+});
+
+
 
 /* GET users listing. */
 router.get('/', function(request, response, next) {
@@ -39,9 +58,13 @@ router.get('/api/todoitems', function(request, response) {
 router.post('/api/todoitems', function(request, response) {
 
     var results = [];
+    logger.info(request.body);
+    logger.info(request.body.text);
 
-    var httpData = {text: request.body.text, complete: false};
+    var todoItem = {"text" : request.body.text,
+                    "createdOn" : new Date()};
 
+                    logger.info(todoItem);
     pg.connect(connectionString, function(error, pgClient, done) {
         if(error) {
           done();
@@ -49,7 +72,7 @@ router.post('/api/todoitems', function(request, response) {
           return response.status(500).json({ success: false, httpData: error});
         }
 
-        pgClient.query("INSERT INTO todoItems(itemData, complete) values($1, $2)", [httpData.text, httpData.complete]);
+        pgClient.query("INSERT INTO todoItems(itemData, complete) values($1, $2)", [todoItem, false]);
 
         var query = pgClient.query("SELECT * FROM todoItems ORDER BY id ASC");
 
